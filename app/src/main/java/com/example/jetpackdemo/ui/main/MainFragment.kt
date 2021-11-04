@@ -6,9 +6,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.TextView
 import com.example.jetpackdemo.R
+import com.example.jetpackdemo.databinding.MainFragmentBinding
 
 class MainFragment : Fragment() {
+
+    lateinit var binding: MainFragmentBinding
 
     companion object {
         fun newInstance() = MainFragment()
@@ -20,13 +25,19 @@ class MainFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.main_fragment, container, false)
+        binding = MainFragmentBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
 
+        binding.buttonConvert.setOnClickListener {
+            val dollarValue = binding.editTextDollar.text.toString()
+            viewModel.setAmount(dollarValue)
+
+            binding.textResult.text = viewModel.getResult().toString()
+        }
+    }
 }
