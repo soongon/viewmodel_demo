@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
+import androidx.lifecycle.Observer
 import com.example.jetpackdemo.R
 import com.example.jetpackdemo.databinding.MainFragmentBinding
 
@@ -33,11 +34,17 @@ class MainFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
+        val resultObserver = Observer<Int> {
+                result -> binding.textResult.text = result.toString()
+        }
+
+        viewModel.getResult().observe(viewLifecycleOwner, resultObserver)
+
         binding.buttonConvert.setOnClickListener {
             val dollarValue = binding.editTextDollar.text.toString()
             viewModel.setAmount(dollarValue)
 
-            binding.textResult.text = viewModel.getResult().toString()
+//            binding.textResult.text = viewModel.getResult().toString()
         }
     }
 }
